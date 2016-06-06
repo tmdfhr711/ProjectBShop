@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="android.finalproject.bshop.UploadShopInfoActivity"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="150dp"
+        android:id="@+id/upload_imege"
+        android:layout_weight="0.5"
+        android:scaleType="fitCenter"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:hint="가게 이름 입력"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:hint="가게주 이름 입력"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:hint="핸드폰 번호 입력"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:hint="가게 주소 입력"/>
+
+
+    <Button
+        android:id="@+id/send_image_server_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:text="저장하기"/>
+
+</LinearLayout>

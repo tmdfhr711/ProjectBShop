@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">BShop</string>
+
+    <string name="background_monitoring">Background Monitoring</string>
+    <string name="background_ranging">Background Ranging</string>
+
+    <string name="start_monitoring">Start Monitoring</string>
+    <string name="start_ranging">Start Ranging</string>
+
+    <string name="temp">xxxxx</string>
+    <string name="major_label">Major: </string>
+    <string name="minor_label">Minor: </string>
+    <string name="tx_label">Tx Power: </string>
+    <string name="rssi_label">RSSI: </string>
+    <string name="proximity_label">Proximity: </string>
+    <string name="accuracy_label">meters</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">User ID</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_nick">Nick</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+
+    <string name="register_beacon_activity">비콘 등록</string>
+
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="unknown_device">Unknown device</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="title_devices">Title Devices</string>
+</resources>
