@@ -47,7 +47,7 @@ public class UploadShopInfoActivity extends AppCompatActivity implements View.On
     private final String uploadFileName = "tmp_1464871148264.jpg";
 
 
-    public static final String UPLOAD_URL = "http://210.117.181.66/BShop/image_upload.php";
+    public static final String UPLOAD_URL = "http://210.117.181.66:8080/BShop/image_upload.php";
     public static final String UPLOAD_KEY = "image";
 
     private int PICK_IMAGE_REQUEST = 1;
