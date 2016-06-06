@@ -1,76 +1,73 @@
 package android.finalproject.bshop;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 
-public class UploadShopInfoActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegistShopActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final int PICK_FROM_CAMERA = 0;
-    private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_CAMERA = 2;
-
-    private Uri mImageCaptureUri;
     private ImageView upload_image;
-    private Button send_image_server;
+    private Button register_shop_button;
+    private EditText shop_name_edt;
+    private EditText shop_ceo_edt;
+    private EditText shop_phone_edt;
+    private EditText shop_address_edt;
 
-    private int serverResponseCode = 0;
-    private String upLoadServerUri = null;
-    private TextView messageText;
-    private ProgressDialog dialog = null;
-    private final String uploadFilePath = "storage/emulated/0/";
-    private final String uploadFileName = "tmp_1464871148264.jpg";
+    private String get_shop_name;
+    private String get_shop_ceo;
+    private String get_shop_phone;
+    private String get_shop_address;
 
 
     public static final String UPLOAD_URL = "http://210.117.181.66:8080/BShop/image_upload.php";
     public static final String UPLOAD_KEY = "image";
+    public static final String UPLOAD_SHOP_NAME = "shop_name";
+    public static final String UPLOAD_SHOP_CEO = "shop_ceo";
+    public static final String UPLOAD_SHOP_PHONE = "shop_phone";
+    public static final String UPLOAD_SHOP_ADDRESS = "shop_address";
+
+
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    private Bitmap bitmap;
+    private Bitmap bitmap = null;
 
-    private Uri filePath;
+    private Uri filePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_shop_info);
+        setContentView(R.layout.acrivity_regist_shop);
 
-        //upLoadServerUri = "http://210.117.181.66/image_upload.php";
-
-
-        upload_image = (ImageView) findViewById(R.id.upload_imege);
-        send_image_server = (Button) findViewById(R.id.send_image_server_button);
-
+        init();
 
         upload_image.setOnClickListener(this);
-        send_image_server.setOnClickListener(this);
+        register_shop_button.setOnClickListener(this);
 
+    }
+    private void init(){
+        upload_image = (ImageView) findViewById(R.id.upload_imege);
+        register_shop_button = (Button) findViewById(R.id.register_shop_button);
+        shop_address_edt = (EditText) findViewById(R.id.edt_shop_address);
+        shop_ceo_edt = (EditText) findViewById(R.id.edt_shop_ceo);
+        shop_name_edt = (EditText) findViewById(R.id.edt_shop_name);
+        shop_phone_edt = (EditText) findViewById(R.id.edt_shop_phone);
     }
 
     private void showFileChooser() {
@@ -113,24 +110,29 @@ public class UploadShopInfoActivity extends AppCompatActivity implements View.On
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(UploadShopInfoActivity.this, "Uploading...", null,true,true);
+                loading = ProgressDialog.show(RegistShopActivity.this, "정보 저장중...", null,true,true);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"가게 등록 완료",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(RegistShopActivity.this, MainActivity.class);
+                startActivity(intent);
             }
 
             @Override
             protected String doInBackground(Bitmap... params) {
                 Bitmap bitmap = params[0];
                 String uploadImage = getStringImage(bitmap);
-
                 HashMap<String,String> data = new HashMap<>();
 
                 data.put(UPLOAD_KEY, uploadImage);
+                data.put(UPLOAD_SHOP_NAME, get_shop_name);
+                data.put(UPLOAD_SHOP_CEO, get_shop_ceo);
+                data.put(UPLOAD_SHOP_PHONE, get_shop_phone);
+                data.put(UPLOAD_SHOP_ADDRESS, get_shop_address);
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
 
                 return result;
@@ -138,7 +140,13 @@ public class UploadShopInfoActivity extends AppCompatActivity implements View.On
         }
 
         UploadImage ui = new UploadImage();
-        ui.execute(bitmap);
+        if(bitmap != null){
+            ui.execute(bitmap);
+        }else{
+            bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_insert_photo_grey600_36dp);
+            ui.execute(bitmap);
+        }
+
     }
 
 
@@ -147,7 +155,11 @@ public class UploadShopInfoActivity extends AppCompatActivity implements View.On
 
         if (v == upload_image) {
             showFileChooser();
-        } else if (v == send_image_server) {
+        } else if (v == register_shop_button) {
+            get_shop_name = shop_name_edt.getText().toString();
+            get_shop_ceo = shop_ceo_edt.getText().toString();
+            get_shop_phone = shop_phone_edt.getText().toString();
+            get_shop_address = shop_address_edt.getText().toString();
             uploadImage();
         }
 

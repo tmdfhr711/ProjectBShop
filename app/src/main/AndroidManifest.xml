@@ -43,7 +43,7 @@
         <activity android:name=".RegisterBeaconActivity"/>
         <activity android:name=".FoundBTDevices"/>
         <activity android:name=".ShopListActivity"/>
-        <activity android:name=".UploadShopInfoActivity"/>
+        <activity android:name=".RegistShopActivity"/>
         <activity android:name=".DetailShopInfoActivity">
         </activity>
     </application>

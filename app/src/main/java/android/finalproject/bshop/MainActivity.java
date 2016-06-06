@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             //finish();
         } else if (btn.getId() == R.id.image_upload_button) {
-            final Intent intent = new Intent(this, UploadShopInfoActivity.class);
+            final Intent intent = new Intent(this, RegistShopActivity.class);
             startActivity(intent);
             //finish();
         }
