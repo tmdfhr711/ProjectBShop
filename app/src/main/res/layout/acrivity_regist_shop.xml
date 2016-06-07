@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".RegistShopActivity"
-    android:weightSum="1.0">
+    android:weightSum="1.0"
+    >
 
     <ImageView
         android:layout_width="400dp"

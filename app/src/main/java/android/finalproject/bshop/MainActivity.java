@@ -8,11 +8,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.finalproject.bshop.adapter.NavigationCateAdapter;
 import android.finalproject.bshop.fragment.LoginFragment;
+import android.finalproject.bshop.fragment.SignUpFragment;
 import android.finalproject.bshop.model.CategoryMenu;
+import android.finalproject.bshop.model.RbPreference;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,10 +27,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.perples.recosdk.RECOBeaconManager;
 import com.perples.recosdk.RECOBeaconRegion;
@@ -36,6 +42,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private static final int FRAGMENT_SIGNIN = 0;
+    private static final int FRAGMENT_SIGNUP = 1;
 
     public static final String RECO_UUID = "24DDF411-8CF1-440C-87CD-E368DAF9C93E";
     public static final boolean SCAN_RECO_ONLY = true;
@@ -70,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button navigation_register_shop_button;
     private Button navigation_register_beacon_button;
     private Button navigation_user_mypage_button;
-    private Button navigation_login_button;
+    private ImageButton navigation_user_setting_button;
     private ImageView navigation_user_profile_picture;
     private TextView navigation_user_nick;
 
@@ -78,12 +86,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<CategoryMenu> listCategory;
     private NavigationCateAdapter navi_adapter;
 
+
+    private Button user_sign_in_button;
+    private Button user_sign_up_button;
+
+    private int get_fragment_extra;
+    private String get_user_id;
+
+    private RbPreference mPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
+
+        mPref = new RbPreference(getApplicationContext());
+        String getVal = mPref.getValue("user_id", "로그인 하세요.");
+        boolean auto_login_check = mPref.getValue("auto_login", false);
+        if (auto_login_check) {
+            navigation_user_nick.setText(getVal);
+        }
+        navigation_user_nick.setText(getVal);
+        /*
+        //get_user_id = "로그인 하세요.";
+        if (getIntent().getStringExtra("user_id") != null) {
+            get_user_id = getIntent().getStringExtra("user_id");
+            navigation_user_setting_button.setEnabled(true);
+            mPref = getSharedPreferences("login", MODE_PRIVATE);
+            SharedPreferences.Editor editor = mPref.edit();
+            editor.putString("user_id", get_user_id);
+            editor.commit();
+        } else {
+            get_user_id = "로그인 하세요.";
+            mPref = getSharedPreferences("login", MODE_PRIVATE);
+            SharedPreferences.Editor editor = mPref.edit();
+            editor.putString("user_id", get_user_id);
+            editor.commit();
+            navigation_user_setting_button.setEnabled(false);
+        }
+*/
+
+        //Toast.makeText(MainActivity.this, get_user_id, Toast.LENGTH_SHORT);
+        //navigation_user_nick.setText(get_user_id.toString());
+
+        get_fragment_extra = 10;
+        get_fragment_extra = getIntent().getIntExtra("go_signup_fragment", 10);
+        if (get_fragment_extra != 10) {
+            replaceLoginFragment(FRAGMENT_SIGNUP);
+        }
+
+
         setSupportActionBar(toolbar);
         //ActionBar를 Toolbar로 대체함.
         //기존의 Actionbar 외에 별도로 Toolbar를 사용하고 싶다면 이 메소드를 호출하지 않고
@@ -121,10 +174,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_register_shop_button = (Button) findViewById(R.id.navigation_register_shop_button);
         navigation_register_beacon_button = (Button) findViewById(R.id.navigation_register_beacon_button);
         navigation_user_mypage_button = (Button) findViewById(R.id.navigation_mypage_button);
-        navigation_login_button = (Button) findViewById(R.id.navigation_login_button);
+        navigation_user_setting_button = (ImageButton) findViewById(R.id.navigation_login_button);
         navigation_user_profile_picture = (ImageView) findViewById(R.id.navigation_user_profile_picture);
         navigation_user_nick = (TextView) findViewById(R.id.navigation_user_nick);
         navigation_category_listview = (ListView) findViewById(R.id.navigation_category_listview);
+        user_sign_in_button = (Button) findViewById(R.id.sign_in_button);
+        user_sign_up_button = (Button) findViewById(R.id.sign_up_button);
 
         listCategory = new ArrayList<>();
 
@@ -140,7 +195,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_register_beacon_button.setOnClickListener(this);
         navigation_user_mypage_button.setOnClickListener(this);
         navigation_user_profile_picture.setOnClickListener(this);
-        navigation_login_button.setOnClickListener(this);
+        navigation_user_setting_button.setOnClickListener(this);
+        navigation_user_nick.setOnClickListener(this);
+        //user_sign_in_button.setOnClickListener(this);
+        //user_sign_up_button.setOnClickListener(this);
 
     }
 
@@ -200,6 +258,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if(!mPref.getValue("auto_login",false)){
+            mPref.put("user_id","로그인 하세요.");
+        }
+
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == navigation_register_shop_button) {
             Intent intent = new Intent(MainActivity.this, RegistShopActivity.class);
@@ -213,16 +280,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v == navigation_user_profile_picture) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-        } else if (v == navigation_login_button) {
-            replaceFragment();
+        } else if (v == navigation_user_setting_button) {
+            mPref = new RbPreference(getApplicationContext());
+            mPref.put("login_id", "로그인 하세요.");
+            mPref.put("auto_login",false);
+            navigation_user_nick.setText(mPref.getValue("login_id",""));
             dlDrawer.closeDrawers();
+        } else if (v == navigation_user_nick) {
+            replaceLoginFragment(FRAGMENT_SIGNIN);
+            dlDrawer.closeDrawers();
+        } else if (v == user_sign_in_button) {
+            replaceLoginFragment(FRAGMENT_SIGNIN);
+        } else if (v == user_sign_up_button) {
+            replaceLoginFragment(FRAGMENT_SIGNUP);
         }
     }
 
-    private void replaceFragment(){
+    public void replaceLoginFragment(int fragment_index){
         Fragment fragment = null;
 
-        fragment = new LoginFragment();
+        switch (fragment_index){
+            case 0 :
+                fragment = new LoginFragment();
+                break;
+            case 1 :
+                fragment = new SignUpFragment();
+                break;
+        }
+
 
         if (null!=fragment) {
             FragmentManager fragmentManager = getFragmentManager();

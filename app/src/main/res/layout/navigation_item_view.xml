@@ -25,17 +25,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="User Nick"
+            android:text="로그인 하세요."
             android:textSize="20dp"
             android:layout_marginLeft="10dp"
             />
-        <Button
+        <ImageButton
             android:id="@+id/navigation_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:background="#00ff0000"
-            android:drawableTop="@drawable/ic_exit_to_app_grey600_18dp"/>
+            android:src="@drawable/ic_settings_grey600_18dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

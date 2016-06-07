@@ -8,7 +8,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:id="@+id/category_image"
         android:layout_gravity="center"
         android:layout_weight="0.3"
@@ -21,6 +21,6 @@
         android:gravity="left"
         android:paddingLeft="25dp"
         android:layout_weight="0.7"
-        android:layout_gravity="left"/>
+        android:layout_gravity="left|center"/>
 
 </LinearLayout>
