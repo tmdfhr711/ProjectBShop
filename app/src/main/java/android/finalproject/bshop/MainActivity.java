@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,13 +102,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         init();
 
+
         mPref = new RbPreference(getApplicationContext());
         String getVal = mPref.getValue("user_id", "로그인 하세요.");
-        boolean auto_login_check = mPref.getValue("auto_login", false);
-        if (auto_login_check) {
+        if(mPref.getValue("auto_login",false)){
+            mPref.put("is_login", true);
+            navigation_user_nick.setText(getVal);
+        }else{
+            //mPref.put("is_login", false);
             navigation_user_nick.setText(getVal);
         }
-        navigation_user_nick.setText(getVal);
+
+
         /*
         //get_user_id = "로그인 하세요.";
         if (getIntent().getStringExtra("user_id") != null) {
@@ -132,7 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         get_fragment_extra = 10;
         get_fragment_extra = getIntent().getIntExtra("go_signup_fragment", 10);
-        if (get_fragment_extra != 10) {
+        if (get_fragment_extra == 1) {
+            replaceLoginFragment(FRAGMENT_SIGNUP);
+            //finish();
+        } else if(get_fragment_extra == 3){
             replaceLoginFragment(FRAGMENT_SIGNUP);
         }
 
@@ -258,19 +267,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if(!mPref.getValue("auto_login",false)){
             mPref.put("user_id","로그인 하세요.");
+            //mPref.put("is_login", false);
         }
+
+        Log.e("onDestroy", "onDestroy");
 
     }
 
     @Override
     public void onClick(View v) {
         if (v == navigation_register_shop_button) {
-            Intent intent = new Intent(MainActivity.this, RegistShopActivity.class);
-            startActivity(intent);
+            Log.e("MainActivity", "register_shop_button");
+            //Toast.makeText(MainActivity.this, navigation_user_nick.getText().toString(), Toast.LENGTH_SHORT);
+            if(mPref.getValue("is_login",false)){
+                Log.e("MainActivity","true" );
+            }else{
+                Log.e("MainActivity", "false");
+            }
+            if(mPref.getValue("is_login",false)){
+                Intent intent = new Intent(MainActivity.this, RegistShopActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "로그인 하세요.", Toast.LENGTH_SHORT);
+            }
+
         } else if (v == navigation_register_beacon_button) {
             Intent intent = new Intent(MainActivity.this, RegistShopActivity.class);
             startActivity(intent);
@@ -284,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mPref = new RbPreference(getApplicationContext());
             mPref.put("login_id", "로그인 하세요.");
             mPref.put("auto_login",false);
+            mPref.put("is_login",false);
             navigation_user_nick.setText(mPref.getValue("login_id",""));
             dlDrawer.closeDrawers();
         } else if (v == navigation_user_nick) {

@@ -100,11 +100,14 @@ public class LoginFragment extends Fragment {
                     mPref = new RbPreference(getActivity());
                     if(auto_login.isChecked()){
                         mPref.put("auto_login", true);
+                        mPref.put("is_login", true);
                     }
                     mPref.put("user_id",s);
+                    mPref.put("is_login", true);
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
+                    getActivity().finish();
                 } else {
                     Toast.makeText(getActivity(),"입력하신 정보를 다시 확인해주세요.",Toast.LENGTH_LONG).show();
 

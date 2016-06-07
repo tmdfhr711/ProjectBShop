@@ -2,6 +2,7 @@ package android.finalproject.bshop;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.finalproject.bshop.model.RbPreference;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -33,10 +34,12 @@ public class RegistShopActivity extends AppCompatActivity implements View.OnClic
     private String get_shop_ceo;
     private String get_shop_phone;
     private String get_shop_address;
+    private String get_user_id;
 
 
     public static final String UPLOAD_URL = "http://210.117.181.66:8080/BShop/image_upload.php";
     public static final String UPLOAD_KEY = "image";
+    public static final String UPLOAD_USER_ID = "user_id";
     public static final String UPLOAD_SHOP_NAME = "shop_name";
     public static final String UPLOAD_SHOP_CEO = "shop_ceo";
     public static final String UPLOAD_SHOP_PHONE = "shop_phone";
@@ -120,6 +123,7 @@ public class RegistShopActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(),"가게 등록 완료",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(RegistShopActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
 
             @Override
@@ -129,6 +133,7 @@ public class RegistShopActivity extends AppCompatActivity implements View.OnClic
                 HashMap<String,String> data = new HashMap<>();
 
                 data.put(UPLOAD_KEY, uploadImage);
+                data.put(UPLOAD_USER_ID, get_user_id);
                 data.put(UPLOAD_SHOP_NAME, get_shop_name);
                 data.put(UPLOAD_SHOP_CEO, get_shop_ceo);
                 data.put(UPLOAD_SHOP_PHONE, get_shop_phone);
@@ -156,10 +161,12 @@ public class RegistShopActivity extends AppCompatActivity implements View.OnClic
         if (v == upload_image) {
             showFileChooser();
         } else if (v == register_shop_button) {
+            RbPreference pre = new RbPreference(getApplicationContext());
             get_shop_name = shop_name_edt.getText().toString();
             get_shop_ceo = shop_ceo_edt.getText().toString();
             get_shop_phone = shop_phone_edt.getText().toString();
             get_shop_address = shop_address_edt.getText().toString();
+            get_user_id = pre.getValue("user_id", "failed");
             uploadImage();
         }
 
