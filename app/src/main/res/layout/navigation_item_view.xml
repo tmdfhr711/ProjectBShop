@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+                android:layout_gravity="center"
+    android:id="@+id/navigation_view">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="left|center"
+        android:weightSum="1">
+        <ImageView
+            android:id="@+id/navigation_user_profile_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_add_circle_grey600_24dp"
+            android:layout_weight="0.4"
+            android:padding="10dp"/>
+        <TextView
+            android:id="@+id/navigation_user_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="User Nick"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            />
+        <Button
+            android:id="@+id/navigation_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/ic_exit_to_app_grey600_18dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:weightSum="0.9">
+
+        <Button
+            android:id="@+id/navigation_register_shop_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="가게등록"
+            android:drawableTop="@drawable/ic_store_mall_directory_grey600_18dp"
+            android:drawablePadding="10dp"
+            android:layout_weight="0.3"
+            android:background="#00ff0000"
+            />
+        <Button
+            android:id="@+id/navigation_register_beacon_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="비콘등록"
+            android:drawableTop="@drawable/ic_cast_connected_grey600_18dp"
+            android:drawablePadding="10dp"
+            android:layout_weight="0.3"
+            android:background="#00ff0000"
+            />
+        <Button
+            android:id="@+id/navigation_mypage_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="내정보"
+            android:drawableTop="@drawable/ic_speaker_grey600_18dp"
+            android:drawablePadding="10dp"
+            android:layout_weight="0.3"
+            android:background="#00ff0000"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/navigation_category_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+</LinearLayout>
