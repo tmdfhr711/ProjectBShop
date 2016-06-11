@@ -2,4 +2,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- 비활성화 상태일 때 불투명도(38%) -->
+
+    <item name="disabled_alpha" type="dimen" format="float">0.38</item>
+    <!-- 활성화 상태일 때 불투명도(87%) -->
+    <item name="enabled_alpha" type="dimen" format="float">0.87</item>
 </resources>

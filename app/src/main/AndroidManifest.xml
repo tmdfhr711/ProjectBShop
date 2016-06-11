@@ -46,6 +46,8 @@
         <activity android:name=".RegistShopActivity"/>
         <activity android:name=".DetailShopInfoActivity">
         </activity>
+        <activity android:name=".SignUpActivity">
+        </activity>
     </application>
 
 </manifest>

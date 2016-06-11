@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int get_fragment_extra;
     private String get_user_id;
+    private boolean check_auto_login;
 
     private RbPreference mPref;
 
@@ -103,47 +104,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
 
 
-        mPref = new RbPreference(getApplicationContext());
-        String getVal = mPref.getValue("user_id", "로그인 하세요.");
-        if(mPref.getValue("auto_login",false)){
-            mPref.put("is_login", true);
-            navigation_user_nick.setText(getVal);
-        }else{
-            //mPref.put("is_login", false);
-            navigation_user_nick.setText(getVal);
-        }
 
-
-        /*
-        //get_user_id = "로그인 하세요.";
-        if (getIntent().getStringExtra("user_id") != null) {
-            get_user_id = getIntent().getStringExtra("user_id");
-            navigation_user_setting_button.setEnabled(true);
-            mPref = getSharedPreferences("login", MODE_PRIVATE);
-            SharedPreferences.Editor editor = mPref.edit();
-            editor.putString("user_id", get_user_id);
-            editor.commit();
-        } else {
-            get_user_id = "로그인 하세요.";
-            mPref = getSharedPreferences("login", MODE_PRIVATE);
-            SharedPreferences.Editor editor = mPref.edit();
-            editor.putString("user_id", get_user_id);
-            editor.commit();
-            navigation_user_setting_button.setEnabled(false);
-        }
-*/
 
         //Toast.makeText(MainActivity.this, get_user_id, Toast.LENGTH_SHORT);
         //navigation_user_nick.setText(get_user_id.toString());
-
-        get_fragment_extra = 10;
-        get_fragment_extra = getIntent().getIntExtra("go_signup_fragment", 10);
-        if (get_fragment_extra == 1) {
-            replaceLoginFragment(FRAGMENT_SIGNUP);
-            //finish();
-        } else if(get_fragment_extra == 3){
-            replaceLoginFragment(FRAGMENT_SIGNUP);
-        }
 
 
         setSupportActionBar(toolbar);
@@ -187,8 +151,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_user_profile_picture = (ImageView) findViewById(R.id.navigation_user_profile_picture);
         navigation_user_nick = (TextView) findViewById(R.id.navigation_user_nick);
         navigation_category_listview = (ListView) findViewById(R.id.navigation_category_listview);
-        user_sign_in_button = (Button) findViewById(R.id.sign_in_button);
-        user_sign_up_button = (Button) findViewById(R.id.sign_up_button);
 
         listCategory = new ArrayList<>();
 
@@ -206,11 +168,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_user_profile_picture.setOnClickListener(this);
         navigation_user_setting_button.setOnClickListener(this);
         navigation_user_nick.setOnClickListener(this);
-        //user_sign_in_button.setOnClickListener(this);
-        //user_sign_up_button.setOnClickListener(this);
+        mPref = new RbPreference(getApplicationContext());
+
+        CheckAutoLogin();
+
+        navigation_user_nick.setText(mPref.getValue("user_id","로그인 하세요."));
+
 
     }
 
+    private void CheckAutoLogin(){
+        //mPref = new RbPreference(getApplicationContext());
+
+        if (check_auto_login = mPref.getValue("auto_login", false)) {
+            String getVal = mPref.getValue("user_id", "로그인 하세요.");
+            navigation_user_nick.setText(getVal);
+            mPref.put("is_login",true);
+        } else {
+            navigation_user_nick.setText("로그인 하세요.");
+            mPref.put("is_login",false);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -312,14 +290,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigation_user_nick.setText(mPref.getValue("login_id",""));
             dlDrawer.closeDrawers();
         } else if (v == navigation_user_nick) {
-            replaceLoginFragment(FRAGMENT_SIGNIN);
-            dlDrawer.closeDrawers();
-        } else if (v == user_sign_in_button) {
-            replaceLoginFragment(FRAGMENT_SIGNIN);
-        } else if (v == user_sign_up_button) {
-            replaceLoginFragment(FRAGMENT_SIGNUP);
+            boolean is_login = mPref.getValue("is_login", false);
+            if (!is_login) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
     }
+    /*
 
     public void replaceLoginFragment(int fragment_index){
         Fragment fragment = null;
@@ -342,5 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             transaction.commit();
 
         }
-    }
+    }*/
+
+
 }

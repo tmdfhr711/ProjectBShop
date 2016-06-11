@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 비활성화 상태일 때 주 Text 색(검정, 38%) -->
+    <item android:state_enabled="false" android:alpha="@dimen/disabled_alpha" android:color="@color/primary_text_color"/>
+    <!-- 활성화 상태일 때 주 Text 색(검정, 87%) -->
+    <item android:alpha="@dimen/enabled_alpha" android:color="@color/primary_text_color"/>
+
+</selector>
