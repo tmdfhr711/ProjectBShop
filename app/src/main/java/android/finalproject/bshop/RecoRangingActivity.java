@@ -25,13 +25,13 @@ package android.finalproject.bshop;
 
 import android.content.Intent;
 import android.finalproject.bshop.adapter.RecoRangingListAdapter;
-import android.finalproject.bshop.model.RecoActivity;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.perples.recosdk.RECOBeacon;
 import com.perples.recosdk.RECOBeaconRegion;
@@ -50,7 +50,9 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
 
     private RecoRangingListAdapter mRangingListAdapter;
     private ListView mRegionListView;
-    private RECOBeacon recoBeacon;
+    private ArrayList<RECOBeacon> mRangedBeacons;
+
+    private TextView getMinor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,7 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
         //RECORangingListener 를 설정합니다. (필수)
         mRecoManager.setRangingListener(this);
 
+
         /**
          * Bind RECOBeaconManager with RECOServiceConnectListener, which is implemented in RECOActivity
          * You SHOULD call this method to use monitoring/ranging methods successfully.
@@ -74,18 +77,25 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
          * bind후에, onServiceConnect() 콜백 메소드가 호출됩니다. 콜백 메소드 호출 이후 monitoring / ranging 작업을 수행하시기 바랍니다.
          */
         mRecoManager.bind(this);
-        mRangingListAdapter = new RecoRangingListAdapter(this);
+
         mRegionListView = (ListView)findViewById(R.id.list_ranging);
+        mRangedBeacons = new ArrayList<>();
+
+        mRangingListAdapter = new RecoRangingListAdapter(this,mRangedBeacons);
         mRegionListView.setAdapter(mRangingListAdapter);
 
         mRegionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RECOBeacon recoItem = (RECOBeacon) mRangingListAdapter.getItem(position);
-                Intent intent = new Intent(RecoRangingActivity.this, RegisterBeaconActivity.class);
-                String proximityUuid = recoItem.getProximityUuid();
-                intent.putExtra("uuid",String.format("%s-%s-%s-%s-%s", proximityUuid.substring(0, 8), proximityUuid.substring(8, 12), proximityUuid.substring(12, 16), proximityUuid.substring(16, 20), proximityUuid.substring(20) ));
+                RECOBeacon reco = (RECOBeacon) mRangingListAdapter.getItem(position);
+
+                //Toast.makeText(RecoRangingActivity.this, position + "클릭", Toast.LENGTH_SHORT);
+
+                Intent intent = new Intent(RecoRangingActivity.this, RegisterBeaconInfoActivity.class);
+                intent.putExtra("minor", reco.getMinor());
                 startActivity(intent);
+                finish();
+
             }
         });
     }
@@ -94,7 +104,11 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
     protected void onResume() {
         super.onResume();
 
-
+        /*
+        mRangingListAdapter = new RecoRangingListAdapter(this,mRangedBeacons);
+        mRegionListView = (ListView)findViewById(R.id.list_ranging);
+        mRegionListView.setAdapter(mRangingListAdapter);
+        */
     }
 
     @Override
@@ -121,6 +135,7 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
         //Write the code when RECOBeaconManager is bound to RECOBeaconService
     }
 
+
     @Override
     public void didRangeBeaconsInRegion(Collection<RECOBeacon> recoBeacons, RECOBeaconRegion recoRegion) {
         Log.i("RECORangingActivity", "didRangeBeaconsInRegion() region: " + recoRegion.getUniqueIdentifier() + ", number of beacons ranged: " + recoBeacons.size());
@@ -141,10 +156,8 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
          * mRecoManager.setDiscontinuousScan(true);
          */
 
-
         for(RECOBeaconRegion region : regions) {
             try {
-
                 mRecoManager.startRangingBeaconsInRegion(region);
             } catch (RemoteException e) {
                 Log.i("RECORangingActivity", "Remote Exception");
@@ -183,5 +196,13 @@ public class RecoRangingActivity extends RecoActivity implements RECORangingList
         //Write the code when the RECOBeaconService is failed to range beacons in the region.
         //See the RECOErrorCode in the documents.
         return;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RecoRangingActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

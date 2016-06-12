@@ -18,15 +18,12 @@
             android:layout_height="wrap_content"
             layout="@layout/toolbar_item_view"/>
 
-        <FrameLayout
+        <ListView
+            android:id="@+id/main_shoplist_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/container"
-            android:layout_gravity="center"
+            android:layout_height="match_parent">
 
-
-            >
-        </FrameLayout>
+        </ListView>
     </LinearLayout>
 
     <RelativeLayout

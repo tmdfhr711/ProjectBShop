@@ -48,6 +48,8 @@
         </activity>
         <activity android:name=".SignUpActivity">
         </activity>
+        <activity android:name=".RegisterBeaconInfoActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -87,7 +87,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="@string/action_sign_up"
-                    android:background="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     style="@style/Widget.AppCompat.Button"/>
             </LinearLayout>

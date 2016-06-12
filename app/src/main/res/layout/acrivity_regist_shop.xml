@@ -35,7 +35,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="0.1"
-                android:hint="Shop Name*"/>
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="Shop Name*"
+                style="@style/TextAppearance.AppCompat"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -49,7 +53,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="0.1"
-                android:hint="Shop CEO Name*"/>
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="Shop CEO Name*"
+                style="@style/TextAppearance.AppCompat"/>
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -64,7 +72,11 @@
                 android:layout_margin="10dp"
                 android:layout_weight="0.1"
                 android:hint="Shop Phone Number*"
-                android:inputType="phone"/>
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:inputType="phone"
+                style="@style/TextAppearance.AppCompat"/>
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -78,7 +90,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="0.1"
-                android:hint="Shop Address"/>
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="Shop Address"
+                style="@style/TextAppearance.AppCompat"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -89,6 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="0.1"
-        android:text="Register"/>
+        android:text="Register"
+        style="@style/Widget.AppCompat.Button"/>
 
 </LinearLayout>

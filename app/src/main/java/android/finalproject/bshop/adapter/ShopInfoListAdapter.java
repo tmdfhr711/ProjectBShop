@@ -44,15 +44,16 @@ public class ShopInfoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+/*
         View v = View.inflate(mContext, R.layout.item_shoplist_view, null);
-        ImageView img_shop_picture = (ImageView) v.findViewById(R.id.shop_main_image);
-        TextView tv_shop_name = (TextView) v.findViewById(R.id.shop_name);
+        ImageView img_shop_picture = (ImageView) v.findViewById(R.id.shoplist_shop_name);
+        TextView tv_shop_name = (TextView) v.findViewById(R.id.shoplist_shopimage);
         //ImageButton ib_shop_coment_num = (ImageButton) v.findViewById(R.id.shop_coment_num);
 
         ShopInfo item = mShopListData.get(position);
         //img_shop_picture;
         tv_shop_name.setText(item.getShopName());
+        */
         return null;
     }
 }
