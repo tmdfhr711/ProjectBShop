@@ -43,7 +43,10 @@ public class GetAlImages {
         try {
             JSONObject jsonObject = new JSONObject(json);
             urls = jsonObject.getJSONArray(JSON_ARRAY_IMAGE_PATH);
+
+            Log.e("urls", urls.toString());
             //names = jsonObject.getJSONArray(JSON_ARRAY_SHOPNAME);
+            //Log.e("names", names.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -54,6 +57,7 @@ public class GetAlImages {
         Bitmap image = null;
         try {
             url = new URL(jo.getString(IMAGE_URL));
+            //getShopNames = jo.getString(SHOP_NAME);
             image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -69,7 +73,7 @@ public class GetAlImages {
         bitmaps = new Bitmap[urls.length()];
 
         imageURLs = new String[urls.length()];
-        //getShopNames = new String[names.length()];
+        getShopNames = new String[names.length()];
 
         for(int i=0;i<urls.length();i++){
             Log.i("urls", String.valueOf(urls.length()));

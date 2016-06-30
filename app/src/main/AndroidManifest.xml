@@ -50,6 +50,10 @@
         </activity>
         <activity android:name=".RegisterBeaconInfoActivity">
         </activity>
+        <activity
+            android:name=".BleRangingActivity"
+            android:allowBackup="true">
+        </activity>
     </application>
 
 </manifest>

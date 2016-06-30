@@ -17,12 +17,14 @@ public class CustomList extends ArrayAdapter<String> {
     private String[] urls;
     private Bitmap[] bitmaps;
     private Activity context;
+    private String[] shopname;
 
     public CustomList(Activity context, String[] urls, Bitmap[] bitmaps) {
         super(context, R.layout.item_shoplist_view, urls);
         this.context = context;
         this.urls= urls;
         this.bitmaps= bitmaps;
+        //this.shopname = shopName;
     }
 
     @Override

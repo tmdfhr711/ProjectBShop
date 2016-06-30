@@ -57,6 +57,7 @@ public class ShopListActivity extends AppCompatActivity implements AdapterView.O
                 super.onPostExecute(v);
                 loading.dismiss();
                 //Toast.makeText(ImageListView.this,"Success",Toast.LENGTH_LONG).show();
+                //CustomList customList = new CustomList(ShopListActivity.this,GetAlImages.imageURLs,GetAlImages.bitmaps);
                 CustomList customList = new CustomList(ShopListActivity.this,GetAlImages.imageURLs,GetAlImages.bitmaps);
                 listView.setAdapter(customList);
             }

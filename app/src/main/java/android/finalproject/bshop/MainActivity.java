@@ -17,7 +17,10 @@ import android.finalproject.bshop.fragment.LoginFragment;
 import android.finalproject.bshop.fragment.SignUpFragment;
 import android.finalproject.bshop.model.CategoryMenu;
 import android.finalproject.bshop.model.GetAlImages;
+import android.finalproject.bshop.model.GetAllShopName;
 import android.finalproject.bshop.model.RbPreference;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,13 +45,19 @@ import android.widget.Toast;
 import com.perples.recosdk.RECOBeaconManager;
 import com.perples.recosdk.RECOBeaconRegion;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -112,7 +121,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String GET_IMAGE_URL="http://210.117.181.66:8080/BShop/shoplist_download.php";
 
-    public GetAlImages getAlImages;
+
+
+
+
+    String myJSON;
+
+    private static final String TAG_RESULTS="result_image";
+    private static final String TAG_PHOTO = "url";
+    private static final String TAG_NAME = "shopname";
+
+    private JSONArray mJSONArray = null;
+    ArrayList<HashMap<String, String>> urlList;
+
+    private static String[] photo;
+    private static String[] name;
+    private static Bitmap[] shopBitmap;
 
     public static final String BITMAP_ID = "BITMAP_ID";
     @Override
@@ -297,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         } else if (v == navigation_user_mypage_button) {
-            Intent intent = new Intent(MainActivity.this, ShopListActivity.class);
+            Intent intent = new Intent(MainActivity.this, BleRangingActivity.class);
             startActivity(intent);
             finish();
         } else if (v == navigation_user_profile_picture) {
@@ -344,30 +368,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }*/
 
+    /*
+     * JSON형태로 된 정보를 가게명, 사진으로 변경 한 뒤 MAIN LISTVIEW에 뿌려주는 함수
+     */
     private void getImages(){
         class GetImages extends AsyncTask<Void,Void,Void> {
             ProgressDialog loading;
+
+
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(MainActivity.this,"가게 리스트","리스트 불러오는중...",false,false);
+                //loading = ProgressDialog.show(MainActivity.this,"가게 리스트","리스트 불러오는중...",false,false);
             }
 
             @Override
             protected void onPostExecute(Void v) {
                 super.onPostExecute(v);
-                loading.dismiss();
+                //loading.dismiss();
                 //Toast.makeText(ImageListView.this,"Success",Toast.LENGTH_LONG).show();
-                CustomList customList = new CustomList(MainActivity.this,GetAlImages.imageURLs,GetAlImages.bitmaps);
+                //CustomList customList = new CustomList(MainActivity.this,GetAlImages.imageURLs,GetAlImages.bitmaps,GetAllShopName.getShopNames);
+                CustomList customList = new CustomList(MainActivity.this,name,shopBitmap);
                 listView.setAdapter(customList);
             }
 
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    getAlImages.getAllImages();
+                    //etAlImages.getAllImages();
+                    //getAllShopName.getAllShopName();
+                    JSONObject jsonObj = new JSONObject(myJSON);
+                    Log.e("jsonObj", jsonObj.toString());
+                    mJSONArray = jsonObj.getJSONArray(TAG_RESULTS);
+                    Log.e("mJSONArray", mJSONArray.toString());
+                    photo = new String[mJSONArray.length()];
+                    name = new String[mJSONArray.length()];
+                    shopBitmap = new Bitmap[mJSONArray.length()];
+
+                    for (int i = 0; i < mJSONArray.length(); i++) {
+                        JSONObject c = mJSONArray.getJSONObject(i);
+                        photo[i] = c.getString(TAG_PHOTO);
+                        name[i] = c.getString(TAG_NAME);
+                    }
+
+                    URL photoUrl = null;
+                    for(int i = 0; i < photo.length; i++){
+                        photoUrl = new URL(photo[i]);
+                        HttpURLConnection connection  = (HttpURLConnection) photoUrl.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        shopBitmap[i] = BitmapFactory.decodeStream(input);
+                    }
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -377,29 +436,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getImages.execute();
     }
 
+    /*
+     * 모든 가게 정보를 가진 JSON DATA를 가져오는 함수
+     */
     private void getURLs() {
         class GetURLs extends AsyncTask<String,Void,String>{
-            ProgressDialog loading;
+            //ProgressDialog loading;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(MainActivity.this,"Loading...","Please Wait...",true,true);
+                //loading = ProgressDialog.show(MainActivity.this,"Loading...","Please Wait...",true,true);
             }
 
             @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                loading.dismiss();
-                getAlImages = new GetAlImages(s);
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                //loading.dismiss();
+                //getAlImages = new GetAlImages(result);
+                myJSON = result;
+                Log.e("getURL", result);
                 getImages();
             }
 
             @Override
             protected String doInBackground(String... strings) {
+                String uri = strings[0];
+
                 BufferedReader bufferedReader = null;
                 try {
-                    URL url = new URL(strings[0]);
+                    URL url = new URL(uri);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
 
